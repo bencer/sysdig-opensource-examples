@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    name: wordpress
+  name: wordpress
+spec: 
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    name: wordpress 
+    app: demo
+    role: frontend

@@ -1,0 +1,38 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: wordpress
+  labels:
+    name: wordpress-deployment
+    app: demo
+spec:
+  replicas: 1
+  # selector identifies the set of Pods that this
+  # replication controller is responsible for managing
+  selector:
+    matchLabels:
+     name: wordpress
+     role: frontend
+     app: demo
+  template:
+    spec:
+      containers:
+        - name: wordpress
+          image: wordpress
+          env:
+          - name: WORDPRESS_DB_PASSWORD
+            value: password
+          - name: WORDPRESS_DB_USER
+            value: admin
+          - name: WORDPRESS_DB_HOST
+            value: mysql.wp-demo.svc.cluster.local:3306
+          ports:
+          - containerPort: 80
+            name: wordpress
+    metadata:
+      labels:
+        # Important: these labels need to match the selector above
+        # The api server enforces this constraint.
+        name: wordpress
+        role: frontend
+        app: demo

@@ -1,0 +1,9 @@
+version: '3'
+services:
+
+  write:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sysdig-example4
+    container_name: write-test

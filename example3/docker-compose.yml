@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-server
+    image: sysdig-example2-server
+    ports:
+      - 8080:8080
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 2000
+        hard: 4000

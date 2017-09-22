@@ -1,0 +1,18 @@
+version: '2'
+services:
+    mongotest:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: mongotest
+      image: sysdig-example5-mongotest
+      links:
+          - mongodb
+      depends_on:
+          - mongodb
+    mongodb:
+        image: mongo:latest
+        container_name: "mongodb"
+        ports:
+            - 27017:27017
+        command: mongod --smallfiles --logpath=/dev/null # --quiet

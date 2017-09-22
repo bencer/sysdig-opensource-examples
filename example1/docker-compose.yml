@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    networks:
+      - back-tier
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    expose:
+      - 80
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    networks:
+      - back-tier
+
+  lb:
+    depends_on:
+      - wordpress
+    image: dockercloud/haproxy
+    ports:
+      - 80:80
+    links:
+      - wordpress
+    networks:
+      - front-tier
+      - back-tier
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock 
+
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge

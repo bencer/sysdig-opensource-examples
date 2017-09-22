@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 8080:80
+
+  apache:
+    image: httpd:latest
+    ports:
+      - 8081:80

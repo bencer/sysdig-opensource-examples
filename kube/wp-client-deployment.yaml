@@ -1,0 +1,31 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: client
+  labels:
+    name: client-deployment
+    app: demo
+spec:
+  replicas: 1
+  # selector identifies the set of Pods that this
+  # replication controller is responsible for managing
+  selector:
+    matchLabels:
+     name: client
+     role: clients
+     app: demo
+  template:
+    spec:
+      containers:
+        - name: client
+          image: ltagliamonte/recurling
+          env:
+          - name: URL
+            value: http://wordpress.wp-demo.svc.cluster.local{/,/readme.html,/wp-login.php,/error1,/error2,/wp-includes/js/utils.js,/wp-content/themes/twentyfifteen/screenshot.png,/wp-content/themes/twentyfifteen/style.css,/wp-content/themes/twentysixteen/js/functions.js,/wp-includes/images/down_arrow.gif,/wp-includes/js/jcrop/Jcrop.gif}
+    metadata:
+      labels:
+        # Important: these labels need to match the selector above
+        # The api server enforces this constraint.
+        name: client
+        role: clients
+        app: demo
