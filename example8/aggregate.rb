@@ -2,8 +2,6 @@ require 'mongo'
 
 include Mongo
 
-$stdout.sync = true
-
 client_host = ['mongodb:27017']
 client_options = {
   database: 'test'
@@ -12,7 +10,7 @@ client_options = {
 client = Mongo::Client.new(client_host, client_options)
 
 loop do
-	print ">:t:aggregate::\n" # Mark the beginning of the query
+        IO.binwrite("/dev/null", ">:t:aggregate::")
 
 	results = client[:customers].aggregate( [
 	                    { "$match" => {}},
@@ -27,6 +25,5 @@ loop do
         #    puts result
         #end
 
-
-	print "<:t:aggregate::\n" # Mark the end of the query
+        IO.binwrite("/dev/null", "<:t:aggregate::")
 end

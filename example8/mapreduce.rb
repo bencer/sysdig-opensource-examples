@@ -2,8 +2,6 @@ require 'mongo'
 
 include Mongo
 
-$stdout.sync = true
-
 client_host = ['mongodb:27017']
 client_options = {
   database: 'test'
@@ -12,12 +10,12 @@ client_options = {
 client = Mongo::Client.new(client_host, client_options)
 
 loop do
-        print ">:t:map-reduce::\n" # Mark the beginning of the query
+        IO.binwrite("/dev/null", ">:t:map-reduce::")
 
         mapreduced = client[:customers].find.map_reduce("function() { emit(this.country_code, this.orders_count) }",
-                  "function(key,values) { return Array.sum(values) }")
+                  "function(key,values) { return Array.sum(values) }", { :out => { :inline => true }, :raw => true})
 
         #mapreduced.each { |x| puts x }
 
-        print "<:t:map-reduce::\n" # Mark the end of the query
+        IO.binwrite("/dev/null", "<:t:map-reduce::")
 end

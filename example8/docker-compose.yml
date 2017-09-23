@@ -11,8 +11,11 @@ services:
       depends_on:
           - mongodb
     mongodb:
-        image: mongo:latest
-        container_name: "mongodb"
-        ports:
-            - 27017:27017
-        command: mongod --smallfiles --logpath=/dev/null # --quiet
+      build:
+        context: .
+        dockerfile: Dockerfile-mongodb
+      container_name: mongodb
+      image: sysdig-example5-mongodb
+      ports:
+          - 27017:27017
+      command: mongod --smallfiles --logpath=/dev/null # --quiet

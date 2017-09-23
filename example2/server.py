@@ -16,17 +16,26 @@ logger = logging.getLogger(__name__)
 
 class MyRequestHandler(BaseHTTPRequestHandler):
 
-    def do_headers(self):
+    def foo_handler(self):
         self.send_response(200)
         self.send_header('text/plain', 'Content-type')
         self.end_headers()
-
-    def foo_handler(self):
-        self.do_headers()
         self.wfile.write('foo')
     
+    def bar_handler(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
+        self.wfile.write('bar')
+    
     def do_GET(self):
-        self.foo_handler()
+        _, mypath= self.path.split('/')
+
+        if mypath == 'foo':
+            self.foo_handler()
+
+        if mypath == 'bar':
+            self.bar_handler()
 
 class ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
     logger.info('Listening for connections...')
