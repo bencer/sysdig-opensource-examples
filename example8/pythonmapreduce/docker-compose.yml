@@ -1,0 +1,17 @@
+version: '2'
+services:
+    mongotest:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: mongotest
+      image: sysdig-example5-mongotest
+      links:
+          - mongodb
+      depends_on:
+          - mongodb
+    mongodb:
+      container_name: mongodb
+      image: mongo
+      ports:
+        - "27017:27017"
