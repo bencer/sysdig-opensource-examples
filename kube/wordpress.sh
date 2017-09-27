@@ -160,3 +160,80 @@ kubectl create -f mysql-service.yaml --namespace=wp-demo
 kubectl create -f wordpress-deployment.yaml --namespace=wp-demo
 kubectl create -f wordpress-service.yaml --namespace=wp-demo
 kubectl create -f wp-client-deployment.yaml --namespace=wp-demo
+
+# Sysdig Monitor agent, remove this if not needed!
+CLUSTER=`hostname --fqdn`
+cat <<- EOF > "sysdig.yaml"
+apiVersion: extensions/v1beta1
+kind: DaemonSet                     
+metadata:
+  name: sysdig-agent
+  labels:
+    app: sysdig-agent
+spec:
+  template:
+    metadata:
+      labels:
+        name: sysdig-agent
+    spec:
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      - name: docker-sock
+        hostPath:
+         path: /var/run/docker.sock
+      - name: dev-vol
+        hostPath:
+         path: /dev
+      - name: proc-vol
+        hostPath:
+         path: /proc
+      - name: boot-vol
+        hostPath:
+         path: /boot
+      - name: modules-vol
+        hostPath:
+         path: /lib/modules
+      - name: usr-vol
+        hostPath:
+          path: /usr
+      hostNetwork: true
+      hostPID: true
+ #    serviceAccount: sysdigcloud                           #OPTIONAL - OpenShift service account for OpenShift
+      containers:
+      - name: sysdig-agent
+        image: sysdig/agent
+#        imagePullPolicy: Always                            #OPTIONAL - Always pull the latest container image tag 
+        securityContext:
+         privileged: true
+        env:
+        - name: ACCESS_KEY                                  #REQUIRED - replace with your Sysdig Cloud access key
+          value: b1ab26a4-ef1a-4e23-b063-1295e17b2f18
+        - name: TAGS                                       #OPTIONAL
+          value: cluster:${CLUSTER}
+#        - name: ADDITIONAL_CONF                            #OPTIONAL pass additional parameters to the agent such as authentication example provided here
+#          value: "k8s_uri: https://myacct:mypass@localhost:4430\nk8s_ca_certificate: k8s-ca.crt\nk8s_ssl_verify_certificate: true"
+        volumeMounts:
+        - mountPath: /host/var/run/docker.sock
+          name: docker-sock
+          readOnly: false
+        - mountPath: /host/dev
+          name: dev-vol
+          readOnly: false
+        - mountPath: /host/proc
+          name: proc-vol
+          readOnly: true
+        - mountPath: /host/boot
+          name: boot-vol
+          readOnly: true
+        - mountPath: /host/lib/modules
+          name: modules-vol
+          readOnly: true
+        - mountPath: /host/usr
+          name: usr-vol
+          readOnly: true
+        - mountPath: /dev/shm
+          name: dshm
+EOF
+kubectl create -f sysdig.yaml

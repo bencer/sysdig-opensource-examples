@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: critical-app
+  labels:
+    app: critical-app
+    role: backend
+spec:
+  # clusterIP: None
+  ports:
+    - port: 80
+  selector:
+    app: critical-app
+    role: backend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: critical-app
+spec:
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: critical-app
+        role: backend
+    spec:
+      containers:
+        - name: backend
+          image: nginx:1.10

@@ -11,5 +11,5 @@ services:
     ulimits:
       nproc: 65535
       nofile:
-        soft: 2000
-        hard: 4000
+        soft: 400
+        hard: 500
