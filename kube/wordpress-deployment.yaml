@@ -6,7 +6,7 @@ metadata:
     name: wordpress-deployment
     app: demo
 spec:
-  replicas: 1
+  replicas: 2
   # selector identifies the set of Pods that this
   # replication controller is responsible for managing
   selector:

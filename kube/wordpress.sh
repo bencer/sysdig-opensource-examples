@@ -71,7 +71,7 @@ metadata:
     name: wordpress-deployment
     app: demo
 spec:
-  replicas: 1
+  replicas: 2
   # selector identifies the set of Pods that this
   # replication controller is responsible for managing
   selector:
@@ -212,8 +212,8 @@ spec:
           value: b1ab26a4-ef1a-4e23-b063-1295e17b2f18
         - name: TAGS                                       #OPTIONAL
           value: cluster:${CLUSTER}
-#        - name: ADDITIONAL_CONF                            #OPTIONAL pass additional parameters to the agent such as authentication example provided here
-#          value: "k8s_uri: https://myacct:mypass@localhost:4430\nk8s_ca_certificate: k8s-ca.crt\nk8s_ssl_verify_certificate: true"
+        - name: ADDITIONAL_CONF                            #OPTIONAL pass additional parameters to the agent such as authentication example provided here
+          value: "k8s_uri: http://localhost:8080\nk8s_autodetect: false"
         volumeMounts:
         - mountPath: /host/var/run/docker.sock
           name: docker-sock
