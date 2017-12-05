@@ -1,5 +1,8 @@
+#!/bin/sh
+
 export ARCH=amd64
 export K8S_VERSION=v1.4.0
+
 docker run -d \
 --volume=/sys:/sys:rw \
 --volume=/var/lib/docker/:/var/lib/docker:rw \

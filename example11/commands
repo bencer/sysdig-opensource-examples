@@ -1,0 +1,2 @@
+kubectl run -it --image=tutum/curl client --namespace critical-app --restart=Never
+kubectl delete pod client --namespace=critical-app

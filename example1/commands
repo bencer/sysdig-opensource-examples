@@ -1,0 +1,28 @@
+sudo sysdig -c lscontainers
+sudo sysdig -c topcontainers_cpu
+sudo sysdig -pc -c topprocs_cpu
+sudo sysdig -pc -c topconns
+sudo sysdig -pc -c topcontainers_net
+sudo sysdig -pc -c topprocs_net
+sudo sysdig -c topcontainers_file
+sudo sysdig -pc -c topprocs_file
+sudo sysdig -pc -c topfiles_bytes
+
+sudo sysdig -w wp.scap
+sysdig -r wp.scap -c fdbytes_by container.name "fd.type=file and container.name!=host"
+sysdig -r wp.scap -c fdbytes_by fd.type
+sysdig -r wp.scap -c fdcount_by container.name "fd.type=file and container.name!=host"
+sysdig -r wp.scap -c fdcount_by fd.sport evt.type=accept
+sysdig -r wp.scap -c fdbytes_by fd.sport
+sysdig -r wp.scap -pc -c fdcount_by fd.cip evt.type=accept
+sysdig -r wp.scap -pc -c fdbytes_by fd.cip
+sysdig -r wp.scap -pc -c httplog
+sysdig -r wp.scap -pc -s 2000 -A -c echo_fds fd.port=80 and evt.buffer contains GET
+sysdig -r wp.scap -pc -s 2000 -A -c echo_fds evt.buffer contains SELECT
+sysdig -r wp.scap -A -c echo_fds "fd.filename=resolv.conf and container.name=wp-client"
+sysdig -r wp.scap -pc -c spy_users container.name=wp-client
+sysdig -r wp.scap -v -A -s 2048 "(proc.name=apache2 or proc.name=mysqld) \
+and evt.type!=gettimeofday and evt.type!=switch and evt.type!=io_getevents \
+and evt.type!=futex and evt.type!=clock_gettime and evt.type=epoll_wait \
+and evt.type!=getsockopt and evt.type!=wait4 and evt.type!=select \
+and evt.type!=semop"

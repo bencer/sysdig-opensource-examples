@@ -1,12 +1,15 @@
-version: '2'
+version: '3'
 
 services:
   nginx:
     image: nginx:latest
     ports:
       - 8080:80
-
-  apache:
+    volumes:
+      - .:/usr/share/nginx/html/
+  httpd:
     image: httpd:latest
     ports:
       - 8081:80
+    volumes:
+      - .:/usr/local/apache2/htdocs/

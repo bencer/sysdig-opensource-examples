@@ -1,0 +1,36 @@
+# Example 2
+
+# Our nginx containers for example1 should only be running the 'nginx' process
+   - rule: Unauthorized process on nginx containers
+     desc: There is a process running in the nginx container that is not described in the template
+     condition: spawned_process and container and container.image startswith nginx and not proc.name in (nginx)
+     output: Unauthorized process (%proc.cmdline) running in (%container.id)
+     priority: WARNING
+
+
+# Example 3
+
+# Enforcing a white list of trusted port numbers
+ - macro: nginx_ports
+     condition: fd.sport=80 or fd.sport=443 or fd.sport=8080
+
+ - rule: Unauthorized port
+     desc: Unauthorized port open on nginx container
+     condition: inbound and container and container.image startswith nginx and not nginx_ports
+     output: Unauthorized port (%fd.name) running in (%container.info)
+     priority: WARNING
+
+
+# Example 4
+
+# Enforcing a white list of allowed user-write directories
+
+ - macro: user_data_dir
+   condition: evt.arg[1] startswith /userdata or evt.arg[1] startswith /var/log/nginx
+
+
+ - rule: Write to non user_data dir
+   desc: attempt to write to directories that should be immutable
+   condition: open_write and container and not user_data_dir
+   output: "Writing to non user_data dir (user=%user.name command=%proc.cmdline file=%fd.name)"
+   priority: ERROR

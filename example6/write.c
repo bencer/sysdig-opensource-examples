@@ -9,7 +9,7 @@ int main()
 
     fd = open("write.bin", O_CREAT | O_WRONLY);
 
-    for(j = 0; j < 3000; j++)
+    for(j = 0; j < 1200; j++)
     {   
         write(fd, buf, j * 1000);
     }   

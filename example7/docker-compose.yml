@@ -1,23 +1,17 @@
 version: '2'
 services:
-
-  server:
-    build:
-      context: .
-      dockerfile: Dockerfile-server
-    image: sysdig-tracers-server
-    container_name: sysdig-tracers-server
-    expose:
-      - 8888
-    mem_limit: 1024m
-    memswap_limit: 1024m
-
-  client:
-    build:
-      context: .
-      dockerfile: Dockerfile-client
-    image: sysdig-tracers-client
-    container_name: sysdig-tracers-client
-    environment:
-      SERVER_HOST: sysdig-tracers-server
-      SERVER_PORT: 8888
+    mongotest:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: mongotest
+      image: sysdig-example5-mongotest
+      links:
+          - mongodb
+      depends_on:
+          - mongodb
+    mongodb:
+      container_name: mongodb
+      image: mongo
+      ports:
+        - "27017:27017"

@@ -1,0 +1,4 @@
+FROM python:2.7-alpine
+RUN pip install sysdig-tracers
+ADD server.py /
+ENTRYPOINT [ "python", "/server.py" ]

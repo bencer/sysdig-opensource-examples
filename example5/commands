@@ -1,0 +1,5 @@
+sudo sysdig -w httpd.scap proc.name=httpd
+curl localhost:8080/foobar.bin > /dev/null
+sysdig -r httpd.scap | less
+sysdig -r httpd.scap -tD 'fd.type=ipv4 and (evt.type=accept or evt.type=close)'
+sysdig -c topscalls_time -r httpd.scap

@@ -9,7 +9,7 @@ int main()
     FILE* f;
     f = fopen("write.bin", "w+");
 
-    for(j = 0; j < 3000; j++)
+    for(j = 0; j < 1200; j++)
     {   
         fwrite(buf, j * 1000, 1, f); 
     }   

@@ -1,0 +1,7 @@
+kubectl create namespace critical-app
+kubectl create -f backend.yaml
+kubectl describe service backend --namespace critical-app
+kubectl run -it --image=tutum/curl client --namespace critical-app --restart=Never
+curl backend
+kubectl delete pod client --namespace=critical-app
+kubectl delete -f backend.yaml

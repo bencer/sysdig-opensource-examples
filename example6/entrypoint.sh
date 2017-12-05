@@ -1,4 +1,5 @@
 #!/bin/sh
+
 cd /usr/src/demo
 echo running write app
 ./write

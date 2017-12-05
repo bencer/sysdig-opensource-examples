@@ -1,0 +1,11 @@
+kubectl create -f backend-wrongport.yaml
+kubectl run -it --image=tutum/curl client --namespace critical-app --restart=Never
+curl backend
+kubectl delete pod client --namespace=critical-app
+kubectl delete -f backend-wrongport.yaml
+
+kubectl create -f backend-wronglabel.yaml
+kubectl run -it --image=tutum/curl client --namespace critical-app --restart=Never
+curl backend
+kubectl delete pod client --namespace=critical-app
+kubectl delete -f backend-wronglabel.yaml

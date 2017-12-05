@@ -1,0 +1,5 @@
+sysdig -r capture.scap "span.duration>5000000"
+sysdig -r capture.scap -c fdbytes_by "evtin.span.tags"
+sysdig -r capture.scap -c fdbytes_by "evtin.span.tags" "fd.type=ipv4"
+sysdig -r capture.scap -c fdbytes_by "evtin.span.tags" "fd.type=file"
+sysdig -r capture.scap -c fdbytes_by fd.name "fd.type=file and evtin.span.tag[0]=download_handler and fd.directory!=/dev/pts"
