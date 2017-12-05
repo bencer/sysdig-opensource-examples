@@ -23,6 +23,6 @@ sysdig -r wp.scap -A -c echo_fds "fd.filename=resolv.conf and container.name=wp-
 sysdig -r wp.scap -pc -c spy_users container.name=wp-client
 sysdig -r wp.scap -v -A -s 2048 "(proc.name=apache2 or proc.name=mysqld) \
 and evt.type!=gettimeofday and evt.type!=switch and evt.type!=io_getevents \
-and evt.type!=futex and evt.type!=clock_gettime and evt.type=epoll_wait \
+and evt.type!=futex and evt.type!=clock_gettime and evt.type!=epoll_wait \
 and evt.type!=getsockopt and evt.type!=wait4 and evt.type!=select \
 and evt.type!=semop"
